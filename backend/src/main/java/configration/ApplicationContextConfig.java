@@ -18,10 +18,17 @@ import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import model.user;
+import Dao.ProductDao;
+import Dao.ProductDaoImple;
+import Dao.UserDao;
+import Dao.UserDaoImple;
+import model.Product;
+import model.User;
+import service.UserService;
+import service.UserServiceImpl;
 
 @Configuration
-@ComponentScan("configration")
+@ComponentScan("model")
 @EnableTransactionManagement
 
 
@@ -31,7 +38,7 @@ public class ApplicationContextConfig {
 	    BasicDataSource dataSource = new BasicDataSource();
 	    System.out.println("before");
 	    dataSource.setDriverClassName("org.h2.Driver");
-	    System.out.println("after");
+
 	    dataSource.setUrl("jdbc:h2:tcp://localhost/~/test");
 	    System.out.println("before1");
 	    dataSource.setUsername("sa");
@@ -45,9 +52,11 @@ public class ApplicationContextConfig {
 	 
 	    LocalSessionFactoryBuilder sessionBuilder = new LocalSessionFactoryBuilder(dataSource);
 	    sessionBuilder.addProperties(getHibernateProperties());
-	    System.out.println("before");
+	    
 	 
-	    sessionBuilder.addAnnotatedClasses(user.class);
+	    sessionBuilder.addAnnotatedClasses(User.class);
+	    sessionBuilder.addAnnotatedClasses(Product.class);
+	    
 	    System.out.println("after");
 	    
 	 
@@ -70,6 +79,20 @@ public class ApplicationContextConfig {
 	 
 	    return transactionManager;
 	}
+	
+	@Bean(name="udao")
+	public UserDao getUserDao()
+	{
+		return new UserDaoImple();
+	}
+	@Bean(name="pdao")
+	public ProductDao getProductDao()
+	{
+		return new ProductDaoImple();
+	}
+	
+	
+	
 }
 	
 	
